@@ -1,38 +1,39 @@
 # raspberrypi-relay-controller
 
-An Ansible playbook to provision a Raspberry Pi as a 2-channel relay control server.  Both a simple web interface and a REST API is provided to allow for easy control and integration with other systems. 
-
-# Instructions
-
-The following instructions assume you are using a Raspberry Pi 3 Model B.
-
-## Setup Arch Linux ARM on Raspberry Pi
-
-1. Follow the [Mount SD card in VirtualBox from Mac OS X Host](http://www.geekytidbits.com/mount-sd-card-virtualbox-from-mac-osx/) guide to get access to SD Card from VirtualBox running on OS X host.
-2. Prepare the SD Card by following [these instructions on the Arch Linux ARM website](https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3).
-3. Before running `umount boot root` from the above instructions, run `sync`.
-4. After running  `umount boot root` from the above instructions, shutdown VirtualBox and then Eject the SD Card from OS X.
-5. Insert SD Card into the Pi and boot
-6. Run `arp -a` and look for the "alarm" entry to find the IP address of the Raspberry Pi.
- 
-## Pre-provisioning
-
-By default Arch Linux ARM does not allow password authentication for root user over ssh.  So, before running the Ansible playbook, you need to ssh with the `alarm` user, `su root` and add an authorized public key so that Ansible is able to ssh in as root. 
-
-1. `ssh alarm@[ip_address]` (password: alarm)
-2. `su root` (password: root)
-3. `mkdir ~/.ssh`
-4. `curl -o ~/.ssh/authorized_keys https://github.com/bradyholt.keys` (replace bradyholt with your GitHub username)
-5. `reboot`
-
-## Provisioning
-
-Do the following from the provisioning host (i.e. OS X or Windows):
-
-1. Ensure [Ansible 2.2](http://docs.ansible.com/ansible/intro_installation.html#latest-releases-on-mac-osx) is installed
-2. Copy config.yml.example to config.yml
-3. Edit config.yml and update values per your environment
-4. Run `./provision.sh`
-5. Navigate to http://[ip_address]:3000 and you should see the web interface like below
+This Node.js application runs on a Raspberry Pi and allows you to control a Relay attached to the GPIO pins using a simple web page.
 
 <img width="360" alt="relay-controller-web-interface" src="https://cloud.githubusercontent.com/assets/759811/21467989/8c2b842e-c9c5-11e6-863e-e1751d73a091.png">
+
+## Requirements
+
+- Node.js >= 9.9.0
+- A user account with sudo access (for deployment)
+
+## Setup
+
+1. Run `./run init`. This will install dependencies.
+1. Run `./run` to start the server
+
+## Deployment
+
+Run `./run deploy username@hostname`. It is assumed _username_ has sudo access on _hostname_.
+
+To see log output on the deployed host, run `sudo journalctl -u raspberrypi-relay-controller`. Add `-f` argument to follow the log.
+
+# SmartThings Setup
+
+## Device Handler Setup
+
+1. Login to [https://graph.api.smartthings.com/](https://graph.api.smartthings.com/)
+2. Go to: My Device Handlers > Create New Device Handler > From Code
+3. Paste contents of `support/pi-relay-control-device-handler.groovy`
+4. Click: Create, Publish > For Me
+
+## Device Setup
+
+1. Login to [https://graph.api.smartthings.com/](https://graph.api.smartthings.com/)
+2. Go to: My Devices > New Device
+3. Specify: Name, Device Network Id (arbitrary), Location, Hub, Type ("Pi Relay Control")
+4. Click: Create, Preferences > edit
+5. Specify: IP, port, Relay #
+6. Click: Save

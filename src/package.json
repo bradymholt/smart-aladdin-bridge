@@ -1,0 +1,14 @@
+{
+  "name": "raspi-relay",
+  "version": "1.0.0",
+  "dependencies": {
+    "hapi": "^16.0.1",
+    "rpio": "^0.9.12",
+    "inert": "^4.0.3",
+    "whatwg-fetch": "^2.0.3"
+  },
+  "scripts": {
+    "dev": "node server.js",
+    "prod": "node server.js"
+  }
+}

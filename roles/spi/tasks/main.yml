@@ -1,5 +1,0 @@
----
-- name: Enable SPI interface
-  lineinfile:
-    dest: /boot/config.txt
-    line: 'dtparam=spi=on'

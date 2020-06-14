@@ -10,10 +10,9 @@ const server = new Hapi.Server({
         }
     }
 });
-server.connection({ port: {{web_port_1}} });
-server.connection({ port: {{web_port_2}} });
+server.connection({ port: 3000 });
 
-const rpio = require('rpio');
+//const rpio = require('rpio');
 const defaultPinOnDuration = 500;
 
 // Raspberry Pi Model B (P1 Header) schematic: http://pi4j.com/images/p1header-large.png
@@ -108,21 +107,21 @@ broadcastSocket.bind(() => {
 
 function toggleGpioPinOn(pin, durationMilliseconds) {
     // Set the initial state to low.
-    rpio.open(pin, rpio.OUTPUT, rpio.LOW);
-    // Turn pin ON.
-    rpio.write(pin, rpio.HIGH);
-    // Wait durationMilliseconds
-    rpio.msleep(durationMilliseconds);
-    // Turn pin OFF.
-    rpio.write(pin, rpio.LOW);
+    // rpio.open(pin, rpio.OUTPUT, rpio.LOW);
+    // // Turn pin ON.
+    // rpio.write(pin, rpio.HIGH);
+    // // Wait durationMilliseconds
+    // rpio.msleep(durationMilliseconds);
+    // // Turn pin OFF.
+    // rpio.write(pin, rpio.LOW);
 }
 
 // On startup, turn all the pins off.
 for(let relay of Object.keys(relayToGpioPinMapping)) {
     let pin = relayToGpioPinMapping[relay];
     // Set the initial state to low.
-    rpio.open(pin, rpio.OUTPUT, rpio.LOW);
-    // Turn pin OFF.
-    rpio.write(pin, rpio.LOW);
+    // rpio.open(pin, rpio.OUTPUT, rpio.LOW);
+    // // Turn pin OFF.
+    // rpio.write(pin, rpio.LOW);
     relayStatus[relay] = false;
 }
