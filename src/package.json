@@ -2,7 +2,7 @@
   "name": "raspi-relay",
   "version": "1.0.0",
   "dependencies": {
-    "hapi": "^16.0.1",
+    "hapi": "^18.1.0",
     "rpio": "^0.9.12",
     "inert": "^4.0.3",
     "whatwg-fetch": "^2.0.3"
